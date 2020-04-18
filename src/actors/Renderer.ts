@@ -1,5 +1,5 @@
 import { Actors, IActor } from './IActor';
-import { IActorSystem } from '../IActorSystem';
+import { IActorSystem } from './IActorSystem';
 
 const TO = 'actor-log@rambler.ru';
 

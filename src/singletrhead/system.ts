@@ -1,7 +1,7 @@
 import {
   Actors, EmailMessage, RenderMessage, IActor, IActorObject
 } from '../actors/IActor';
-import { IActorControl } from '../IActorSystem';
+import {IActorControl} from '../actors/IActorSystem';
 
 
 class ActorSystem {
@@ -18,7 +18,7 @@ class ActorSystem {
     }
 
     static start(name: Actors, count = 1) {
-      require(`../actors/${name}.ts`);
+
       const record = ActorSystem.actors.get(name);
       if (record) {
         const ActorClass = record.actor as IActorObject;

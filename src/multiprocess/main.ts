@@ -1,15 +1,13 @@
-'use strict';
-
-const ActorSystem = require('./system.js');
+import ActorSystem from './system';
+import { Actors } from '../actors/IActor';
 
 const EXIT_NORMAL = 1000;
 const EXIT_ABNORMAL = 5000;
 
-ActorSystem.start('Root');
+ActorSystem.start(Actors.ROOT);
 
 process.on('SIGINT', () => {
-  console.log('');
-  ActorSystem.stop('Root');
+  ActorSystem.stop(Actors.ROOT);
   setTimeout(() => {
     console.log('Graceful shutdown');
     process.exit(0);

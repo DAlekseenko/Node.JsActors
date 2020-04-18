@@ -1,15 +1,24 @@
-import { IActorSystem } from '../IActorSystem';
+import {IActorSystem} from './IActorSystem';
+import {Commands} from "../comands/CommandCollection";
 
-export type EmailMessage = {
+export interface EmailMessage {
     to: string;
     subject: string;
     message: string;
 }
 
-export type RenderMessage = {
+export interface RenderMessage {
     url: string;
     success: boolean;
     status?: number | string;
+}
+
+export interface CommandMessage {
+    command: Commands
+    name?: string
+    data?: EmailMessage | RenderMessage
+    count?: number
+    pid?: number
 }
 
 export enum Actors {
@@ -30,5 +39,3 @@ export interface IActor {
 export interface IActorObject extends IActor {
     new(system: IActorSystem): IActor;
 }
-
-

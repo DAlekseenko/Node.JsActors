@@ -1,6 +1,6 @@
 import { get } from 'http';
 import {  IActor, Actors, EmailMessage, RenderMessage } from './IActor';
-import { IActorSystem } from '../IActorSystem';
+import { IActorSystem } from './IActorSystem';
 
 const URL = 'http://localhost:8000/';
 const INTERVAL = 2000;

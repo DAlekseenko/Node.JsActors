@@ -1,5 +1,5 @@
 import { Actors, EmailMessage, IActor, RenderMessage } from './IActor';
-import { IActorSystem } from '../IActorSystem';
+import { IActorSystem } from './IActorSystem';
 
 class Root implements IActor {
 
