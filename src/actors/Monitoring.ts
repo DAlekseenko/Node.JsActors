@@ -1,17 +1,18 @@
 import { get } from 'http';
-import {  IActor, Actors, EmailMessage, RenderMessage } from './IActor';
-import { IActorSystem } from './IActorSystem';
+import {EmailMessage, RenderMessage} from "../messaging/MessageContracts";
+import {Actor, Actors} from "./contracts/Actor";
+import {System} from "../systems/contracts/System";
 
 const URL = 'http://localhost:8000/';
 const INTERVAL = 2000;
 
-class Monitoring implements IActor {
+class Monitoring implements Actor {
 
     private allowed: boolean = true;
     private readonly timer: NodeJS.Timer;
-    private system: IActorSystem;
+    private system: System;
 
-    constructor(system: IActorSystem) {
+    constructor(system: System) {
       this.system = system;
       console.log('Start actor: Monitoring');
       this.timer = setInterval(() => {

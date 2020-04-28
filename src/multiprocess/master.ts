@@ -1,64 +1,75 @@
-import {fork} from 'child_process';
-import {IActorControl, IActorMultiSystemMaster} from "../actors/IActorSystem";
-import {ActorsCommands, Commands, MasterCommands} from "../comands/CommandCollection";
-import {IActorCommandConstructor} from "../comands/IActorCommand";
-import ActorSystem from "./worker";
+import {ChildProcess, fork} from 'child_process';
+import {Commands, MasterCommands} from "../comands/CommandCollection";
+import {SystemControlProps} from "../systems/contracts/SystemControlProps";
+import {MasterCommandConstructor} from "../comands/contracts/Command";
+import {Actors} from "../actors/contracts/Actor";
 
 class MasterSystem {
 
-    private static actors = new Map<string, IActorControl<IActorMultiSystemMaster>>()
+    static workers = new Map<Actors, SystemControlProps<ChildProcess>>()
 
     static start(name, count = 1) {
-        if (!MasterSystem.actors.has(name)) {
+        if (!MasterSystem.workers.has(name)) {
             const ready = [];
             const instances = [];
             const queue = [];
-            MasterSystem.actors.set(name, {ready, instances, queue});
+            MasterSystem.workers.set(name, {ready, instances, queue});
         }
-        const actor = MasterSystem.actors.get(name);
+        const actor = MasterSystem.workers.get(name);
         if (actor) {
             const {ready, instances} = actor;
             for (let i = 0; i < count; i++) {
-                const actor = fork('./system.js');
-                MasterSystem.subscribe(actor);
-                ready.push(actor);
-                instances.push(actor);
-                actor.send({command: Commands.START, name});
+                const worker = fork(
+                    './src/multiprocess/system.ts',
+                    [],
+                    {
+                        execArgv: ["-r", "ts-node/register"]
+                    }
+                );
+
+                MasterSystem.subscribe(worker);
+
+                ready.push(worker);
+                instances.push(worker);
+
+                worker.send({command: Commands.START, name});
             }
         }
     }
 
     static stop(name) {
-        const record = MasterSystem.actors.get(name);
+        const record = MasterSystem.workers.get(name);
         if (record) {
             const {instances} = record;
-            for (const actor of instances) {
-                actor.send({command: Commands.STOP});
+            for (const worker of instances) {
+                worker.send({command: Commands.STOP});
             }
         }
     }
 
     static send(name, data) {
-        const record = MasterSystem.actors.get(name);
+        const record = MasterSystem.workers.get(name);
         if (record) {
             const {ready, queue} = record;
-            const actor = ready.shift();
-            if (!actor) {
+            const worker = ready.shift();
+            if (!worker) {
                 queue.push(data);
                 return;
             }
-            actor.send({command: Commands.MESSAGE, data});
+
+            worker.send({command: Commands.MESSAGE, data});
         }
     }
 
-    static subscribe(actor) {
-        actor.on('message', MasterSystem.subscribeHandler)
+    static subscribe(worker) {
+        worker.on('message', MasterSystem.messageHandler)
     }
 
-    static subscribeHandler(message) {
-        const Command = MasterCommands.get(message.command) as IActorCommandConstructor | undefined;
+    static messageHandler(message) {
+        console.log('master', message);
+        const Command = MasterCommands.get(message.command) as MasterCommandConstructor | undefined;
         if (Command) {
-            const instance = new Command(ActorSystem, message);
+            const instance = new Command(MasterSystem, message);
             instance.execute();
         }
     }

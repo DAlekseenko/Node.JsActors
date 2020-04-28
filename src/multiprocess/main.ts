@@ -1,5 +1,5 @@
 import ActorSystem from './system';
-import { Actors } from '../actors/IActor';
+import { Actors } from '../actors/ActorContract';
 
 const EXIT_NORMAL = 1000;
 const EXIT_ABNORMAL = 5000;

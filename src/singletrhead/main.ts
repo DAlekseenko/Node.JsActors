@@ -1,5 +1,5 @@
 import ActorSystem from './system';
-import { Actors } from '../actors/IActor';
+import { Actors } from '../actors/ActorContract';
 import Mailer from '../actors/Mailer';
 import Monitoring from '../actors/Monitoring';
 import Renderer from '../actors/Renderer';

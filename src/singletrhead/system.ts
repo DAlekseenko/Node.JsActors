@@ -1,6 +1,6 @@
 import {
-  Actors, EmailMessage, RenderMessage, IActor, IActorObject
-} from '../actors/IActor';
+  Actors, EmailMessage, RenderMessage, ActorContract, IActorConstructor
+} from '../actors/ActorContract';
 import {IActorControl} from '../actors/IActorSystem';
 
 
@@ -8,7 +8,7 @@ class ActorSystem {
 
     private static actors = new Map<string, IActorControl>()
 
-    static register(actor: IActor) {
+    static register(actor: ActorContract) {
       const instances = [];
       const queue = [];
       const ready = [];
@@ -21,7 +21,7 @@ class ActorSystem {
 
       const record = ActorSystem.actors.get(name);
       if (record) {
-        const ActorClass = record.actor as IActorObject;
+        const ActorClass = record.actor as IActorConstructor;
         const { instances, ready } = record;
         for (let i = 0; i < count; i++) {
           const instance = new ActorClass(this);

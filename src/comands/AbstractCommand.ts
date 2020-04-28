@@ -1,16 +1,10 @@
-import {CommandMessage} from "../actors/IActor";
-import {IActorMultiSystem} from "../actors/IActorSystem";
-import {IActorCommand} from "./IActorCommand";
+import {CommandMessage} from "../messaging/MessageContracts";
 
-export default abstract class AbstractCommand implements IActorCommand {
+export default class AbstractCommand<S, M = CommandMessage> {
 
-    protected message: CommandMessage;
-    protected system: IActorMultiSystem
-
-    protected constructor(system: IActorMultiSystem, message: CommandMessage) {
-        this.message = message;
-        this.system = system;
+    constructor(
+        protected system: S,
+        protected message: M
+    ) {
     }
-
-    public abstract execute();
 }

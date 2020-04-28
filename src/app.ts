@@ -1,6 +1,6 @@
 import {createInterface} from 'readline';
-import {Actors} from './actors/IActor';
-import {IActorSystem} from "./actors/IActorSystem";
+import {System} from "./systems/contracts/System";
+import {Actors} from "./actors/contracts/Actor";
 
 const RL = createInterface({
     input: process.stdin,
@@ -10,7 +10,7 @@ const RL = createInterface({
 const EXIT_NORMAL = 1000;
 const EXIT_ABNORMAL = 5000;
 
-let system: IActorSystem;
+let system: System;
 
 function main() {
     RL.question('Set your work model! Or write help ', async (answer) => {
@@ -25,9 +25,10 @@ function main() {
         if (answer === '1') {
             try {
                const imorted = await import('./multiprocess/system');
-               system = imorted.default
+               // @ts-ignore
+                system = imorted.default as System;
             } catch (e) {
-                console.log('Module load failed');
+                console.log('Module load failed', e);
                 return main();
             }
         }

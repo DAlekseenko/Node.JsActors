@@ -1,13 +1,14 @@
-import { Actors, IActor } from './IActor';
-import { IActorSystem } from './IActorSystem';
+import {Actor, Actors} from "./contracts/Actor";
+import {System} from "../systems/contracts/System";
 
 const TO = 'actor-log@rambler.ru';
 
-class Renderer implements IActor {
+class Renderer implements Actor {
 
-    private system: IActorSystem;
-
-    constructor(system: IActorSystem) {
+    constructor(
+        private readonly system: System
+    ) {
+        console.log(this.system);
       this.system = system;
       console.log('Start actor: Renderer');
     }

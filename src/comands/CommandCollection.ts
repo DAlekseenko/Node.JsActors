@@ -1,11 +1,13 @@
 import AbstractCommand from "./AbstractCommand";
-import ActorStartCommand from "./ActorStartCommand";
-import ActorStopCommand from "./ActorStopCommand";
-import ActorMessageCommand from "./ActorMessageCommand";
-import MasterStartCommand from "./MasterStartCommand";
-import MasterMessageCommand from "./MasterReadyCommand";
-import MasterStopCommand from "./MasterStopCommand";
-import MasterReadyCommands from "./MasterMessageCommand";
+import MasterMessageCommand from "./master/MasterMessageCommand";
+import MasterStartCommand from "./master/MasterStartCommand";
+import MasterReadyCommand from "./master/MasterReadyCommand";
+import MasterStopCommand from "./master/MasterStopCommand";
+import {MasterSystem} from "../systems/contracts/MasterSystem";
+import WorkerMessageCommand from "./worker/WorkerMessageCommand";
+import WorkerStartCommand from "./worker/WorkerStartCommand";
+import WorkerStopCommand from "./worker/WorkerStopCommand";
+import {WorkerSystem} from "../systems/contracts/WorkerSystem";
 
 export enum Commands {
     START = 'start',
@@ -14,15 +16,17 @@ export enum Commands {
     READY = 'ready'
 }
 
-export const ActorsCommands = new Map<string, AbstractCommand>([
-    [Commands.MESSAGE, ActorMessageCommand.prototype],
-    [Commands.START, ActorStartCommand.prototype],
-    [Commands.STOP, ActorStopCommand.prototype],
+// @ts-ignore
+export const WorkerCommands = new Map<string, AbstractCommand<WorkerSystem>>([
+    [Commands.MESSAGE, WorkerMessageCommand],
+    [Commands.START, WorkerStartCommand],
+    [Commands.STOP, WorkerStopCommand],
 ]);
 
-export const MasterCommands = new Map<string, AbstractCommand>([
-    [Commands.MESSAGE, MasterMessageCommand.prototype],
-    [Commands.START, MasterStartCommand.prototype],
-    [Commands.STOP, MasterStopCommand.prototype],
-    [Commands.READY, MasterReadyCommands.prototype],
+// @ts-ignore
+export const MasterCommands = new Map<string, AbstractCommand<MasterSystem>>([
+    [Commands.MESSAGE, MasterMessageCommand],
+    [Commands.START, MasterStartCommand],
+    [Commands.STOP, MasterStopCommand],
+    [Commands.READY, MasterReadyCommand],
 ]);

@@ -1,17 +1,13 @@
-import {CommandMessage, IActor, IActorObject} from "../actors/IActor";
-import  {ActorsCommands, Commands} from "../comands/CommandCollection";
-import {IActorCommandConstructor} from "../comands/IActorCommand";
+import {Commands, WorkerCommands} from "../comands/CommandCollection";
+import {CommandMessage} from "../messaging/MessageContracts";
+import {WorkerCommandConstructor} from "../comands/contracts/Command";
+import {Actor} from "../actors/contracts/Actor";
 
 
-class ActorSystem {
+class WorkerSystem {
 
-    static actor: IActorObject;
-    static instance: IActor;
+    static instance: Actor;
     static pid: number
-
-    static register(actor) {
-        this.actor = actor;
-    }
 
     static start(name, count = 1) {
         process.send && process.send({command: Commands.START, name, count});
@@ -26,27 +22,27 @@ class ActorSystem {
     }
 
     static ready(name) {
-        console.log(this.pid);
-        process.send && process.send({command: Commands.READY, name, pid: ActorSystem.pid});
+        console.log('worker', name);
+        process.send && process.send({command: Commands.READY, name, pid: WorkerSystem.pid});
     }
 
     static setPid(pid) {
-        ActorSystem.pid = pid
-        this.pid = pid
+        WorkerSystem.pid = pid
     }
 }
 
-ActorSystem.setPid(process.pid);
+WorkerSystem.setPid(process.pid);
 
 process.on('SIGINT', () => {
 });
 
-process.on('message', (message:CommandMessage) => {
-    const Command = ActorsCommands.get(message.command) as IActorCommandConstructor | undefined;
+process.on('message', (message: CommandMessage) => {
+    console.log(message, 'Worker');
+    const Command = WorkerCommands.get(message.command) as WorkerCommandConstructor | undefined;
     if (Command) {
-        const instance = new Command(ActorSystem, message);
-        instance.execute();
+        const command = new Command(WorkerSystem, message);
+        command.execute();
     }
 });
 
-export default ActorSystem;
+export default WorkerSystem;

@@ -1,13 +1,11 @@
-import { Actors, EmailMessage, IActor, RenderMessage } from './IActor';
-import { IActorSystem } from './IActorSystem';
+import {Actor, Actors} from "./contracts/Actor";
+import {System} from "../systems/contracts/System";
 
-class Root implements IActor {
+class Root implements Actor {
 
-    private system: IActorSystem
-
-    constructor(system: IActorSystem) {
-      console.log('here');
-      this.system = system;
+    constructor(
+        private readonly system: System
+    ) {
       this.start();
     }
 
@@ -18,7 +16,7 @@ class Root implements IActor {
       this.system.start(Actors.MAILER, 3);
     }
 
-    async message(message?: EmailMessage | RenderMessage) {
+    async message(message?: any) {
       console.log('Monitoring message', message);
     }
 

@@ -1,10 +1,11 @@
 import { createTransport } from 'nodemailer';
-import { IActor, EmailMessage } from './IActor';
 import config from '../config';
+import {EmailMessage} from "../messaging/MessageContracts";
+import {Actor} from "./contracts/Actor";
 
 const FROM = 'robot@proekt-xolod.ru';
 
-class Mailer implements IActor {
+class Mailer implements Actor {
 
   private transport;
 
@@ -14,6 +15,7 @@ class Mailer implements IActor {
   }
 
   async message({ to, subject, message }: EmailMessage) {
+    console.log(message, 'mailer');
     const mail = { from: FROM, to, subject, text: message };
     this.transport.sendMail(mail, (error, data) => {
       if (error) console.log({ error });

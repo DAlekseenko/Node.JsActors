@@ -16,7 +16,7 @@ class MasterSystem {
     const { ready, instances } = actors.get(name);
     for (let i = 0; i < count; i++) {
       const actor = new Worker('./system.js');
-      console.log({ actor });
+
       MasterSystem.subscribe(actor);
       ready.push(actor);
       instances.push(actor);
