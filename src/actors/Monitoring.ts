@@ -1,7 +1,7 @@
 import { get } from 'http';
-import {EmailMessage, RenderMessage} from "../messaging/MessageContracts";
-import {Actor, Actors} from "./contracts/Actor";
-import {System} from "../systems/contracts/System";
+import { EmailMessage, RenderMessage } from '../messaging/MessageContracts';
+import { Actor, Actors } from './contracts/Actor';
+import { System } from '../systems/contracts/System';
 
 const URL = 'http://localhost:8000/';
 const INTERVAL = 2000;

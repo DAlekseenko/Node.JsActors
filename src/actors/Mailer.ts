@@ -1,7 +1,7 @@
 import { createTransport } from 'nodemailer';
 import config from '../config';
-import {EmailMessage} from "../messaging/MessageContracts";
-import {Actor} from "./contracts/Actor";
+import { EmailMessage } from '../messaging/MessageContracts';
+import { Actor } from './contracts/Actor';
 
 const FROM = 'robot@proekt-xolod.ru';
 
@@ -15,7 +15,6 @@ class Mailer implements Actor {
   }
 
   async message({ to, subject, message }: EmailMessage) {
-    console.log(message, 'mailer');
     const mail = { from: FROM, to, subject, text: message };
     this.transport.sendMail(mail, (error, data) => {
       if (error) console.log({ error });
@@ -24,6 +23,7 @@ class Mailer implements Actor {
   }
 
   async exit() {
+    // @ts-ignore
     this.transport.close();
     console.log('Stop actor: Mailer');
   }

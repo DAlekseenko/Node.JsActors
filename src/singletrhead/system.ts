@@ -1,27 +1,31 @@
-import {
-  Actors, EmailMessage, RenderMessage, ActorContract, IActorConstructor
-} from '../actors/ActorContract';
-import {IActorControl} from '../actors/IActorSystem';
+import { ActorConstructor, Actors } from '../actors/contracts/Actor';
+import { SystemControlProps } from '../systems/contracts/SystemControlProps';
+import ActorCollection from '../actors/ActorCollection';
+import { EmailMessage, RenderMessage } from '../messaging/MessageContracts';
 
 
-class ActorSystem {
+class MasterSystem {
 
-    private static actors = new Map<string, IActorControl>()
+    private static actors = new Map<Actors, SystemControlProps>()
 
-    static register(actor: ActorContract) {
-      const instances = [];
-      const queue = [];
-      const ready = [];
-      const c = actor.constructor;
+    static register(name: Actors) {
+      const actor = MasterSystem.actors.get(name);
 
-      ActorSystem.actors.set(c.name, { actor: c, ready, instances, queue });
+      if (!actor) {
+        const ready = [];
+        const instances = [];
+        const queue = [];
+        MasterSystem.actors.set(name, { ready, instances, queue });
+        return MasterSystem.actors.get(name);
+      }
+      return actor;
     }
 
     static start(name: Actors, count = 1) {
+      const record = this.register(name);
 
-      const record = ActorSystem.actors.get(name);
       if (record) {
-        const ActorClass = record.actor as IActorConstructor;
+        const ActorClass = ActorCollection.get(name) as ActorConstructor;
         const { instances, ready } = record;
         for (let i = 0; i < count; i++) {
           const instance = new ActorClass(this);
@@ -32,7 +36,7 @@ class ActorSystem {
     }
 
     static async stop(name: Actors) {
-      const record = ActorSystem.actors.get(name);
+      const record = MasterSystem.actors.get(name);
       if (record) {
         const { instances } = record;
         await Promise.all(instances.map(instance => instance.exit()));
@@ -40,7 +44,7 @@ class ActorSystem {
     }
 
     static async send(name: Actors, message?: EmailMessage | RenderMessage) {
-      const record = ActorSystem.actors.get(name);
+      const record = MasterSystem.actors.get(name);
       if (record) {
         const { ready, queue } = record;
         const actor = ready.shift();
@@ -58,4 +62,4 @@ class ActorSystem {
     }
 }
 
-export default ActorSystem;
+export default MasterSystem;

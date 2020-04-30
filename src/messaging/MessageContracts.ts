@@ -1,5 +1,5 @@
-import {Commands} from "../comands/CommandCollection";
-import {Actors} from "../actors/contracts/Actor";
+import { Commands } from '../comands/CommandCollection';
+import { Actors } from '../actors/contracts/Actor';
 
 export interface EmailMessage {
     to: string;
@@ -14,9 +14,9 @@ export interface RenderMessage {
 }
 
 export interface CommandMessage {
-    command: Commands
-    name: Actors
-    data?: EmailMessage | RenderMessage
-    count: number
-    pid: number
+    command: Commands;
+    name: Actors;
+    data?: EmailMessage | RenderMessage;
+    count: number;
+    pid: number;
 }

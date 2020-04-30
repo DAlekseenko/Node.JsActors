@@ -1,21 +1,20 @@
-import AbstractCommand from "../AbstractCommand";
-import {Command} from "../contracts/Command";
-import {Actors} from "../../actors/contracts/Actor";
-import {WorkerSystem} from "../../systems/contracts/WorkerSystem";
+import AbstractCommand from '../AbstractCommand';
+import { Command } from '../contracts/Command';
+import { Actors } from '../../actors/contracts/Actor';
+import { WorkerSystem } from '../../systems/contracts/WorkerSystem';
 
-class WorkerMessageCommand extends AbstractCommand<WorkerSystem> implements Command   {
-    execute() {
-        const {instance} = this.system;
-        if (instance) {
-            const {data} = this.message;
+class WorkerMessageCommand extends AbstractCommand<WorkerSystem> implements Command {
+  execute() {
+    const { instance } = this.system;
+    if (instance) {
+      const { data } = this.message;
 
-            const {name} = instance.constructor;
-            console.log({name}, 'ActorStartCommand');
+      const { name } = instance.constructor;
 
-            instance.message(data);
-            this.system.ready(name as Actors);
-        }
+      instance.message(data);
+      this.system.ready(name as Actors);
     }
+  }
 }
 
 export default WorkerMessageCommand;
