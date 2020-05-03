@@ -2,11 +2,14 @@
   "name": "actor-model-node-js",
   "version": "1.0.0",
   "scripts": {
-    "dev": "nodemon —experimental-worker",
-    "test": "export NODE_ENV=test && mocha -r ts-node/register --timeout 1000 tests/*.test.ts"
+    "dev": "nodemon",
+    "start": "ts-node -r tsconfig-paths/register ./src/app.ts"
   },
   "dependencies": {
     "nodemailer": "^6.4.6"
+  },
+  "engines": {
+    "node": ">=12"
   },
   "devDependencies": {
     "@types/node": "13.13.0",

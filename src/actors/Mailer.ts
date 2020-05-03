@@ -23,7 +23,6 @@ class Mailer implements Actor {
   }
 
   async exit() {
-    // @ts-ignore
     this.transport.close();
     console.log('Stop actor: Mailer');
   }
