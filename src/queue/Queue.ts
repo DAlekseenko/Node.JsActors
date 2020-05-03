@@ -5,7 +5,7 @@ type Timeout = NodeJS.Timeout;
 type OnProcess = (task: any, finish: Callback) => void;
 type OnDrain = () => void;
 
-class Queue implements IQueue {
+class Queue<T> implements IQueue<T> {
 
     private paused = false;
     private readonly concurrency;
@@ -21,7 +21,7 @@ class Queue implements IQueue {
     private onSuccess: null | Callback = null
     private onDone: null | Callback = null
     private onDrain: null | OnDrain = null
-    private destination: null | IQueue = null
+    private destination: null | IQueue<T> = null
 
     constructor(concurrency) {
       this.concurrency = concurrency;
@@ -32,7 +32,7 @@ class Queue implements IQueue {
       return new Queue(concurrency);
     }
 
-    public add(task, priority = 0) {
+    public add(task: T, priority = 0) {
       if (!this.paused) {
         const hasChannel = this.count < this.concurrency;
         if (hasChannel) {
@@ -46,7 +46,7 @@ class Queue implements IQueue {
       }
     }
 
-    private next(task) {
+    private next(task: T) {
       this.count++;
       let timer: Timeout | null = null;
       let finished = false;
@@ -165,3 +165,5 @@ class Queue implements IQueue {
       return this;
     }
 }
+
+export default Queue;

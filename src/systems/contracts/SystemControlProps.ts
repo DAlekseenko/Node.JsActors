@@ -1,8 +1,9 @@
-import {Actor} from "../../actors/contracts/Actor";
-import {EmailMessage, RenderMessage} from "../../messaging/MessageContracts";
+import { Actor, Actors } from '../../actors/contracts/Actor';
+import { EmailMessage, RenderMessage } from '../../messaging/MessageContracts';
+import { IQueue } from '../../queue/contracts/Queue';
 
 export interface SystemControlProps<T = Actor> {
     instances: Array<T>;
     ready: Array<T>;
-    queue: Array<EmailMessage | RenderMessage | undefined>;
+    queue: IQueue<{ name: Actors; message?: EmailMessage | RenderMessage; timeout: number }>;
 }

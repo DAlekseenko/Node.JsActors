@@ -7,6 +7,6 @@ import { Worker } from 'worker_threads';
 export type WorkerThread = Worker;
 
 export interface MasterSystem extends System {
-    workers: Map<Actors, SystemControlProps<ChildProcess & WorkerThread>>;
+    workers: Map<Actors, SystemControlProps<ChildProcess | WorkerThread>>;
     subscribe: (name: Actor) => void;
 }

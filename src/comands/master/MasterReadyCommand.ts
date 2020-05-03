@@ -10,21 +10,21 @@ class MasterReadyCommand extends AbstractCommand<MasterSystem> implements Comman
     const record = this.system.workers.get(name);
 
     if (record) {
-      const { ready, instances, queue } = record;
+
+      const { ready, instances } = record;
       for (const worker of instances) {
 
+        // @ts-ignore
         if (worker.pid && worker.pid === pid) {
           ready.push(worker);
         }
 
+        // @ts-ignore
         if (worker.threadId && worker.threadId === pid) {
           ready.push(worker);
         }
       }
-      if (queue.length > 0) {
-        const next = queue.shift();
-        this.system.send(name, next);
-      }
+
     }
   }
 }
