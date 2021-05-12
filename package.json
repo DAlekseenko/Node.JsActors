@@ -6,7 +6,7 @@
     "start": "ts-node -r tsconfig-paths/register ./src/app.ts"
   },
   "dependencies": {
-    "nodemailer": "^6.4.6"
+    "nodemailer": "^6.4.16"
   },
   "engines": {
     "node": ">=12"
